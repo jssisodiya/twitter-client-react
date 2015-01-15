@@ -1,0 +1,22 @@
+{
+  "name": "twitter-client-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jssisodiya/twitter-client-react.git"
+  },
+  "author": "jssisodiya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jssisodiya/twitter-client-react/issues"
+  },
+  "homepage": "https://github.com/jssisodiya/twitter-client-react",
+  "dependencies": {
+    "express": "^4.11.0"
+  }
+}
