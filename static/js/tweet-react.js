@@ -21,15 +21,49 @@ var NavBar = React.createClass({
     }
 });
 
+var data = [
+  {"name": "Pete Hunt", "text": "This is one tweet", "screenName":"@PeteHunt", "profile_image_url" :"http://pbs.twimg.com/profile_images/527865014011432961/Tr3IDBXM_normal.jpeg"},
+  {"name": "Jordan Walke", "text": "This is another tweet", "screenName" : "@jordanWalke", "profile_image_url" : "http://pbs.twimg.com/profile_images/425960656047579136/v2ZqO_bI_normal.jpeg"},
+  {"name": "Jitendra Sisodiya", "text": "This is third tweet", "screenName" : "@jssisodiya", "profile_image_url" : "http://pbs.twimg.com/profile_images/425960656047579136/v2ZqO_bI_normal.jpeg"}
+];
+
 var SearchBox = React.createClass({
+    handleSubmit: function(e) {
+        e.preventDefault();
+        var search_term = this.refs.search_term.getDOMNode().value.trim();
+        console.log(search_term);
+        if (!search_term ) {
+          return;
+        }
+        $.ajax({
+            url: "search?term="+search_term,
+            dataType: 'json',
+            type: 'GET',
+            success: function(data) {
+                console.log(data);
+                // this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+        this.refs.search_term.getDOMNode().value = '';
+        return;
+    },
     render: function() {
         return (
             <div className="container-fluid"  style={{marginRight:'1%', marginTop:'5%'}}>
                 <div className="row">
                     <div className="panel panel-info col-lg-6 col-lg-offset-6">
                         <div className="panel-body">
-                            <input type="text" name="search_term" className="col-lg-3 form-control" placeholder="Search with keywords/hashtags"/>
-                            <div className="col-lg-4" id="search-results">
+                            <div className="row">
+                                <form action="" onSubmit={this.handleSubmit}>
+                                    <input type="text" name="search_term" className="col-lg-2 form-control" placeholder="Search with keywords/hashtags" ref="search_term"/>
+                                    <button type="submit" className="col-lg-2 btn btn-default dropdown-toggle">Search</button>
+                                </form>
+                            </div>
+                            <div className="row" id="search-results">
+                                <TweetList data={data} />
                             </div>
                         </div>
                     </div>
@@ -39,6 +73,56 @@ var SearchBox = React.createClass({
     }
 });
 
+
+var TweetList = React.createClass({
+    // getInitialState: function() {
+    //     return {data: []};
+    // },
+    // componentDidMount: function() {
+    //     $.ajax({
+    //       url: this.props.url,
+    //       dataType: 'json',
+    //       success: function(data) {
+    //         this.setState({data: data});
+    //       }.bind(this),
+    //       error: function(xhr, status, err) {
+    //         console.error(this.props.url, status, err.toString());
+    //       }.bind(this)
+    //     });
+    // },
+    render: function(){
+        var tweetNodes = this.props.data.map(function (tweet) {
+        return (
+            <Tweet name={tweet.name} screenName={tweet.screenName} image={tweet.profile_image_url} text={tweet.text}>
+            </Tweet>
+        );
+    });
+        return (
+            <div className="tweetList">
+                {tweetNodes}
+            </div>
+        );
+    }
+});
+
+var Tweet = React.createClass({
+    render: function(){
+        return (
+                <div className="tweet-container">
+                    <div className="row">
+                        <div className="col-lg-4">
+                            <img src={this.props.image}/>{this.props.name} {this.props.screenName}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-lg-4">
+                            {this.props.text}
+                        </div>
+                    </div>
+                </div>
+            );
+    }
+});
 
 React.render(
   <TweetContainer />,
