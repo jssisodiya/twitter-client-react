@@ -28,6 +28,9 @@ var data = [
 ];
 
 var SearchBox = React.createClass({
+    getInitialState: function() {
+        return {data: []};
+    },
     handleSubmit: function(e) {
         e.preventDefault();
         var search_term = this.refs.search_term.getDOMNode().value.trim();
@@ -36,12 +39,12 @@ var SearchBox = React.createClass({
           return;
         }
         $.ajax({
-            url: "search?term="+search_term,
+            url: "search?term="+escape(search_term),
             dataType: 'json',
             type: 'GET',
             success: function(data) {
                 console.log(data);
-                // this.setState({data: data});
+                this.setState({data: data});
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -53,21 +56,23 @@ var SearchBox = React.createClass({
     render: function() {
         return (
             <div className="container-fluid"  style={{marginRight:'1%', marginTop:'5%'}}>
-                <div className="row">
+                // <div className="row">
                     <div className="panel panel-info col-lg-6 col-lg-offset-6">
                         <div className="panel-body">
                             <div className="row">
-                                <form action="" onSubmit={this.handleSubmit}>
-                                    <input type="text" name="search_term" className="col-lg-2 form-control" placeholder="Search with keywords/hashtags" ref="search_term"/>
-                                    <button type="submit" className="col-lg-2 btn btn-default dropdown-toggle">Search</button>
+                                <form action="" className="form-inline" onSubmit={this.handleSubmit}>
+                                    <div className="form-group">
+                                        <input type="text" name="search_term" className="form-control" placeholder="Search with keywords/hashtags" ref="search_term"/>
+                                    </div>
+                                    <button type="submit" className="btn btn-default btn-sm">Search</button>
                                 </form>
                             </div>
                             <div className="row" id="search-results">
-                                <TweetList data={data} />
+                                <TweetList data={this.state.data} />
                             </div>
                         </div>
                     </div>
-                </div>
+                // </div>
             </div>
         );
     }
@@ -77,18 +82,6 @@ var SearchBox = React.createClass({
 var TweetList = React.createClass({
     // getInitialState: function() {
     //     return {data: []};
-    // },
-    // componentDidMount: function() {
-    //     $.ajax({
-    //       url: this.props.url,
-    //       dataType: 'json',
-    //       success: function(data) {
-    //         this.setState({data: data});
-    //       }.bind(this),
-    //       error: function(xhr, status, err) {
-    //         console.error(this.props.url, status, err.toString());
-    //       }.bind(this)
-    //     });
     // },
     render: function(){
         var tweetNodes = this.props.data.map(function (tweet) {
@@ -111,7 +104,7 @@ var Tweet = React.createClass({
                 <div className="tweet-container">
                     <div className="row">
                         <div className="col-lg-4">
-                            <img src={this.props.image}/>{this.props.name} {this.props.screenName}
+                            <img src={this.props.image}/>{this.props.name} @{this.props.screenName}
                         </div>
                     </div>
                     <div className="row">
