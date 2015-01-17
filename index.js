@@ -13,6 +13,10 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+app.get('/index1', function (req, res) {
+  res.sendFile(__dirname + '/views/index1.html');
+});
+
 var server = app.listen(3030, function () {
 
   var host = server.address().address
@@ -54,8 +58,25 @@ app.get('/followers', function (req, res) {
 	var url_parts = url.parse(req.url, true);
 	var query = url_parts.query;
 	dataToSend = [];
-	T.get('followers/list', { screen_name: query.screen_name,count:10 }, function(err, data, response) {
+	T.get('followers/list', { screen_name: query.screen_name,count:50 }, function(err, data, response) {
 		console.log("searching followers");
+		users = data.users;
+		async.forEach(users, function (user, callback) {
+			dataToSend.push({text:user['text'],name:user['name'],screenName:user['screen_name'],profile_image_url:user['profile_image_url'],friends_count:user['friends_count'],followers_count:user['followers_count']});
+  			callback();
+		}, 
+		function (err) {
+  			if (err) { throw err; }
+  			res.send(dataToSend);
+		});
+	});
+});
+app.get('/friends', function (req, res) {
+	var url_parts = url.parse(req.url, true);
+	var query = url_parts.query;
+	dataToSend = [];
+	T.get('friends/list', { screen_name: query.screen_name,count:50 }, function(err, data, response) {
+		console.log("searching friends");
 		users = data.users;
 		async.forEach(users, function (user, callback) {
 			dataToSend.push({text:user['text'],name:user['name'],screenName:user['screen_name'],profile_image_url:user['profile_image_url'],friends_count:user['friends_count'],followers_count:user['followers_count']});
@@ -102,5 +123,22 @@ app.get('/home_timeline', function (req, res) {
   			res.send(dataToSend);
 		});
 		// res.send(data);
+	});
+});
+
+app.get('/favorites', function (req, res) {
+	var url_parts = url.parse(req.url, true);
+	var query = url_parts.query;
+	dataToSend = [];
+	T.get('favorites/list', { screen_name: query.screen_name,count:10 }, function(err, data, response) {
+		console.log("favorites");
+		async.forEach(data, function (tweet, callback) {
+			dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
+  			callback();
+		}, 
+		function (err) {
+  			if (err) { throw err; }
+  			res.send(dataToSend);
+		});
 	});
 });
