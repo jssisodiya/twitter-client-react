@@ -3,7 +3,7 @@ var TweetContainer = React.createClass({
         return (
             <div className="main-container">
                 <NavBar />
-                <div className="container" style={{marginTop:'5%'}}>
+                <div className="container" style={{marginTop:'3%'}}>
                     <div className="row">
                         <UserSeachBox />
                         <TweetSearchBox />
@@ -19,7 +19,7 @@ var NavBar = React.createClass({
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
                 <div className="container">
-                    <h3 style={{color: 'white'}} className="col-lg-offset-5">Twitter</h3>
+                    <i className="fa fa-3x fa-twitter col-lg-offset-6" style={{color:"white;"}}></i>
                 </div>
             </nav>
         );
@@ -37,6 +37,98 @@ var UserSeachBox = React.createClass({
     getInitialState:function(){
         return {home_timeline:[],user_timeline:[],favorites:[],followers:[],following:[]};
     },
+    handleHomeTimelineClick:function(){
+        var screen_name = this.refs.screen_name.getDOMNode().value.trim();
+        console.log(screen_name);
+        if (!screen_name ) {
+          return;
+        }
+        $.ajax({
+            url: "home_timeline?screen_name="+screen_name,
+            dataType: 'json',
+            type: 'GET',
+            success: function(homeData) {
+                this.setState({home_timeline:homeData});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+        
+    },
+    handleUserTimelineClick:function(){
+        var screen_name = this.refs.screen_name.getDOMNode().value.trim();
+        console.log(screen_name);
+        if (!screen_name ) {
+          return;
+        }
+        $.ajax({
+            url: "user_timeline?screen_name="+screen_name,
+            dataType: 'json',
+            type: 'GET',
+            success: function(userData) {
+                this.setState({user_timeline:userData});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+    handleFavoritesClick:function(){
+        var screen_name = this.refs.screen_name.getDOMNode().value.trim();
+        console.log(screen_name);
+        if (!screen_name ) {
+          return;
+        }
+        $.ajax({
+            url: "favorites?screen_name="+screen_name,
+            dataType: 'json',
+            type: 'GET',
+            success: function(userData) {
+                this.setState({favorites:userData});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+        
+    },
+    handleFollowersClick:function(){
+        var screen_name = this.refs.screen_name.getDOMNode().value.trim();
+        console.log(screen_name);
+        if (!screen_name ) {
+          return;
+        }
+        $.ajax({
+            url: "followers?screen_name="+screen_name,
+            dataType: 'json',
+            type: 'GET',
+            success: function(userData) {
+                this.setState({followers:userData});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+    handleFollowingClick:function(){
+        var screen_name = this.refs.screen_name.getDOMNode().value.trim();
+        console.log(screen_name);
+        if (!screen_name ) {
+          return;
+        }
+        $.ajax({
+            url: "friends?screen_name="+screen_name,
+            dataType: 'json',
+            type: 'GET',
+            success: function(userData) {
+                this.setState({following:userData});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
     handleSubmit: function(e) {
         e.preventDefault();
         var screen_name = this.refs.screen_name.getDOMNode().value.trim();
@@ -48,7 +140,6 @@ var UserSeachBox = React.createClass({
             url: "home_timeline?screen_name="+screen_name,
             dataType: 'json',
             type: 'GET',
-            async: false,
             success: function(homeData) {
                 this.setState({home_timeline:homeData});
             }.bind(this),
@@ -56,54 +147,7 @@ var UserSeachBox = React.createClass({
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
-        $.ajax({
-            url: "user_timeline?screen_name="+screen_name,
-            dataType: 'json',
-            type: 'GET',
-            async: false,
-            success: function(userData) {
-                this.setState({user_timeline:userData});
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
-        $.ajax({
-            url: "favorites?screen_name="+screen_name,
-            dataType: 'json',
-            type: 'GET',
-            async: false,
-            success: function(userData) {
-                this.setState({favorites:userData});
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
-        $.ajax({
-            url: "followers?screen_name="+screen_name,
-            dataType: 'json',
-            type: 'GET',
-            async: false,
-            success: function(userData) {
-                this.setState({followers:userData});
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
-        $.ajax({
-            url: "friends?screen_name="+screen_name,
-            dataType: 'json',
-            type: 'GET',
-            async: false,
-            success: function(userData) {
-                this.setState({following:userData});
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
+        
         return;
     },
     render: function(){
@@ -112,47 +156,47 @@ var UserSeachBox = React.createClass({
                     <div className="panel-body">
                         <div className="row">
                             <form action="" className="form-inline" onSubmit={this.handleSubmit}>
-                                <div className="form-group">
-                                    <label >Enter any user screen name</label>
-                                    <input type="text" name="search_term" className="form-control" placeholder="eg. jsinghsisodiya, WeAreMumbai" ref="screen_name"/>
+                                <div className="form-group" style={{width:"92%"}}>
+                                    <input type="text" name="search_term" className="form-control" style={{width:"100%"}} placeholder="Enter user screen name eg. jsinghsisodiya, WeAreMumbai" ref="screen_name"/>
                                 </div>
-                                <button type="submit" className="btn btn-default btn-sm">Search</button>
+                                <button type="submit" className="btn btn-default"><i className="fa fa-search"></i></button>
                             </form>
                         </div>
                         <div className="row">
                             <ul className="nav nav-pills">
                                 <li className="active">
-                                    <a data-toggle="tab" href="#home-timeline-div">
+                                    <a data-toggle="tab" href="#home-timeline-div" onClick={this.handleHomeTimelineClick}>
                                         <i className="fa fa-home"></i>&nbsp;
                                         Home
                                     </a>
                                 </li>
                                 <li>
-                                    <a data-toggle="tab" href="#user-timeline-div">
+                                    <a data-toggle="tab" href="#user-timeline-div" onClick={this.handleUserTimelineClick}>
                                         <i className="fa fa-user"></i>&nbsp;
                                         User
                                     </a>
                                 </li>
                                 <li>
-                                    <a data-toggle="tab" href="#favorites-div">
+                                    <a data-toggle="tab" href="#favorites-div" onClick={this.handleFavoritesClick}>
                                         <i className="fa fa-star"></i>&nbsp;
                                         Favorites
                                     </a>
                                 </li>
                                 <li>
-                                    <a data-toggle="tab" href="#followers-div">
+                                    <a data-toggle="tab" href="#followers-div" onClick={this.handleFollowersClick}>
                                         <i className="fa  fa-mail-forward"></i>&nbsp;
                                         Followers
                                     </a>
                                 </li>
                                 <li>
-                                    <a data-toggle="tab" href="#following-div">
+                                    <a data-toggle="tab" href="#following-div" onClick={this.handleFollowingClick}>
                                         <i className="fa fa-mail-reply-all"></i>&nbsp;
                                         Following
                                     </a>
                                 </li>
                             </ul>
                         </div>
+                        <br/>
                          <div className="tab-content">
                             <div id="home-timeline-div" className="tab-pane fade in active">
                                 <TweetList data={this.state.home_timeline} />
@@ -182,7 +226,22 @@ var UserSeachBox = React.createClass({
 
 var TweetSearchBox = React.createClass({
     getInitialState: function() {
-        return {data: []};
+        return {data:[],trendsData:[]};
+    },
+    componentDidMount: function(){
+        $.ajax({
+            url: "trends",
+            dataType: 'json',
+            type: 'GET',
+            async:false,
+            success: function(data) {
+                this.setState({trendsData:data});
+                console.log("state is assigned with data");
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
     },
     handleSubmit: function(e) {
         e.preventDefault();
@@ -197,6 +256,7 @@ var TweetSearchBox = React.createClass({
             type: 'GET',
             success: function(data) {
                 this.setState({data: data});
+                $('#search-tab').click();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -211,14 +271,36 @@ var TweetSearchBox = React.createClass({
                         <div className="panel-body">
                             <div className="row">
                                 <form action="" className="form-inline" onSubmit={this.handleSubmit}>
-                                    <div className="form-group">
-                                        <input type="text" name="search_term" className="form-control" placeholder="Search with keywords/hashtags" ref="search_term"/>
+                                    <div className="form-group" style={{width:"92%"}}>
+                                        <input type="text" name="search_term" className="form-control" placeholder="Search with keywords/hashtags" style={{width:"100%"}} ref="search_term"/>
                                     </div>
-                                    <button type="submit" className="btn btn-default btn-sm">Search</button>
+                                    <button type="submit" className="btn btn-default"><i className="fa fa-search"></i></button>
                                 </form>
                             </div>
-                            <div className="row" id="search-results">
-                                <TweetList data={this.state.data} />
+                            <div className="row">
+                                <ul className="nav nav-pills">
+                                    <li className="active">
+                                        <a data-toggle="tab" href="#trends-div">
+                                            <i className="fa fa-home"></i>&nbsp;
+                                            Trends
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#search-res-div" id="search-tab">
+                                            <i className="fa fa-user"></i>&nbsp;
+                                            Search Results
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <br/>
+                            <div className="tab-content">
+                                <div id="trends-div" className="tab-pane fade in active">
+                                    <TrendList data={this.state.trendsData} />
+                                </div>
+                                <div id="search-res-div" className="tab-pane fade">
+                                    <TweetList data={this.state.data} />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -253,11 +335,11 @@ var Tweet = React.createClass({
         return (
                 <li className="list-group-item">
                         <div className="row">
-                            <div className="col-lg-1">
+                            <div className="col-lg-2">
                                 <img className="img-circle" src={this.props.image}/>
                             </div>
-                            <div className="col-lg-11">
-                                <label>{this.props.name} @{this.props.screenName}</label>
+                            <div className="col-lg-10">
+                                <label>{this.props.name} <a target="_blank" href={'http://www.twitter.com/'+this.props.screenName}>@{this.props.screenName}</a></label>
                                 <br/>
                                 {this.props.text}
                             </div>
@@ -301,6 +383,36 @@ var User = React.createClass({
                             </div>
                         </div>
                 </li>
+            );
+    }
+});
+
+var TrendList = React.createClass({
+    render: function(){
+        var trendNodes = this.props.data.map(function(trend){
+            return (
+                    <Trend name={trend.name} url={trend.url}>
+                    </Trend>
+                );
+        })
+        return (
+            <div className="trendList">
+                <ul className="list-group">
+                    {trendNodes}
+                </ul>
+            </div>
+            );
+    }
+});
+
+var Trend = React.createClass({
+    render:function(){
+        return (
+                <div className="trendContainer">
+                    <li className="list-group-item">
+                        <a href={this.props.url} target="_blank">{this.props.name}</a>
+                    </li>
+                </div>
             );
     }
 });
