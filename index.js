@@ -27,16 +27,25 @@ var server = app.listen(3030, function () {
 });
 
 
+// var T = new Twit({
+//     consumer_key: 'your_consumer_key',
+//     consumer_secret: 'your_consumer_secret',
+//     access_token: 'your_access_token',
+//     access_token_secret: 'your_access_token_secret'
+// });
+
 var T = new Twit({
-    consumer_key: 'your_consumer_key',
-    consumer_secret: 'your_consumer_secret',
-    access_token: 'your_access_token',
-    access_token_secret: 'your_access_token_secret'
-});
+    consumer_key: '03Ut9mzraEM45AAAZBth1iokw',
+    consumer_secret: '065BqxDDNj6zsqQd6X2xcqrEypaau5XlftoSUvnF3JZPNJHx0V',
+    access_token: '476108266-oFg94PdI88TKtWOXg80dGyIzuW3RKfUrt4bC2kEU',
+    access_token_secret: 'fbTTszyKI3XasImhiXXJFItheGcjzSW6CF4k9Hsz5D9Zb'
+})
+
 
 app.get('/search', function (req, res) {
 	var url_parts = url.parse(req.url, true);
 	var query = url_parts.query;
+	console.log("querying for");
 	console.log(query.term);
 	dataToSend = [];
 	T.get('search/tweets', { q: query.term+' since:2015-01-01', count: 10 }, function(err, data, response) {
@@ -44,7 +53,7 @@ app.get('/search', function (req, res) {
 		tweets = data.statuses;
 		if(tweets){
 			async.forEach(tweets, function (tweet, callback) {
-				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
+				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url'],created_at:tweet['created_at'],retweet_count:tweet['retweet_count'],favorite_count:tweet['favorite_count'],entities:tweet['entities']});
 	  			callback();
 			}, 
 			function (err) {
@@ -55,6 +64,7 @@ app.get('/search', function (req, res) {
 		else{
 			res.send([]);
 		}
+		// res.send(data);
   		
 	});
 });
@@ -113,7 +123,7 @@ app.get('/user_timeline', function (req, res) {
 		console.log("user_timeline");
 		if(data){
 			async.forEach(data, function (tweet, callback) {
-				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
+				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url'],created_at:tweet['created_at'],retweet_count:tweet['retweet_count'],favorite_count:tweet['favorite_count'],entities:tweet['entities']});
 	  			callback();
 			}, 
 			function (err) {
@@ -136,7 +146,7 @@ app.get('/home_timeline', function (req, res) {
 		console.log("home_timeline");
 		if(data){
 			async.forEach(data, function (tweet, callback) {
-				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
+				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url'],created_at:tweet['created_at'],retweet_count:tweet['retweet_count'],favorite_count:tweet['favorite_count'],entities:tweet['entities']});
 	  			callback();
 			}, 
 			function (err) {
@@ -159,7 +169,7 @@ app.get('/favorites', function (req, res) {
 		console.log("favorites");
 		if(data){
 			async.forEach(data, function (tweet, callback) {
-				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
+				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url'],created_at:tweet['created_at'],retweet_count:tweet['retweet_count'],favorite_count:tweet['favorite_count'],entities:tweet['entities']});
 	  			callback();
 			}, 
 			function (err) {
