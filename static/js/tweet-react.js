@@ -43,12 +43,14 @@ var UserSeachBox = React.createClass({
         if (!screen_name ) {
           return;
         }
+        $('#user-search-box').after("<span id='user-message'>fetching data for you</span>");
         $.ajax({
             url: "home_timeline?screen_name="+screen_name,
             dataType: 'json',
             type: 'GET',
             success: function(homeData) {
                 this.setState({home_timeline:homeData});
+                $('#user-message').remove();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -62,12 +64,14 @@ var UserSeachBox = React.createClass({
         if (!screen_name ) {
           return;
         }
+        $('#user-search-box').after("<span id='user-message'>fetching data for you</span>");
         $.ajax({
             url: "user_timeline?screen_name="+screen_name,
             dataType: 'json',
             type: 'GET',
             success: function(userData) {
                 this.setState({user_timeline:userData});
+                $('#user-message').remove();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -80,12 +84,14 @@ var UserSeachBox = React.createClass({
         if (!screen_name ) {
           return;
         }
+        $('#user-search-box').after("<span id='user-message'>fetching data for you</span>");
         $.ajax({
             url: "favorites?screen_name="+screen_name,
             dataType: 'json',
             type: 'GET',
             success: function(userData) {
                 this.setState({favorites:userData});
+                $('#user-message').remove();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -99,12 +105,14 @@ var UserSeachBox = React.createClass({
         if (!screen_name ) {
           return;
         }
+        $('#user-search-box').after("<span id='user-message'>fetching data for you</span>");
         $.ajax({
             url: "followers?screen_name="+screen_name,
             dataType: 'json',
             type: 'GET',
             success: function(userData) {
                 this.setState({followers:userData});
+                $('#user-message').remove();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -117,12 +125,14 @@ var UserSeachBox = React.createClass({
         if (!screen_name ) {
           return;
         }
+        $('#user-search-box').after("<span id='user-message'>fetching data for you</span>");
         $.ajax({
             url: "friends?screen_name="+screen_name,
             dataType: 'json',
             type: 'GET',
             success: function(userData) {
                 this.setState({following:userData});
+                $('#user-message').remove();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -136,12 +146,14 @@ var UserSeachBox = React.createClass({
         if (!screen_name ) {
           return;
         }
+        $('#user-search-box').after("<span id='user-message'>fetching data for you</span>");
         $.ajax({
             url: "home_timeline?screen_name="+screen_name,
             dataType: 'json',
             type: 'GET',
             success: function(homeData) {
                 this.setState({home_timeline:homeData});
+                $('#user-message').remove();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -154,7 +166,7 @@ var UserSeachBox = React.createClass({
         return (
                 <div className="panel panel-info col-lg-6">
                     <div className="panel-body">
-                        <div className="row">
+                        <div className="row" id="user-search-box">
                             <form action="" className="form-inline" onSubmit={this.handleSubmit}>
                                 <div className="form-group" style={{width:"92%"}}>
                                     <input type="text" name="search_term" className="form-control" style={{width:"100%"}} placeholder="Enter user screen name eg. jsinghsisodiya, WeAreMumbai" ref="screen_name"/>
@@ -250,6 +262,7 @@ var TweetSearchBox = React.createClass({
         if (!search_term ) {
           return;
         }
+        $('#search-box').after("<span id='search-message'>fetching data for you</span>");
         $.ajax({
             url: "search?term="+escape(search_term),
             dataType: 'json',
@@ -257,6 +270,7 @@ var TweetSearchBox = React.createClass({
             success: function(data) {
                 this.setState({data: data});
                 $('#search-tab').click();
+                $('#search-message').remove();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -269,7 +283,7 @@ var TweetSearchBox = React.createClass({
         return (
                     <div className="panel panel-info col-lg-6">
                         <div className="panel-body">
-                            <div className="row">
+                            <div className="row" id="search-box">
                                 <form action="" className="form-inline" onSubmit={this.handleSubmit}>
                                     <div className="form-group" style={{width:"92%"}}>
                                         <input type="text" name="search_term" className="form-control" placeholder="Search with keywords/hashtags" style={{width:"100%"}} ref="search_term"/>

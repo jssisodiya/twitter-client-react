@@ -27,12 +27,20 @@ var server = app.listen(3030, function () {
 });
 
 
+// var T = new Twit({
+//     consumer_key: 'your_consumer_key',
+//     consumer_secret: 'your_consumer_secret',
+//     access_token: 'your_access_token',
+//     access_token_secret: 'your_access_token_secret'
+// });
+
 var T = new Twit({
-    consumer_key: 'your_consumer_key',
-    consumer_secret: 'your_consumer_secret',
-    access_token: 'your_access_token',
-    access_token_secret: 'your_access_token_secret'
-})
+    consumer_key: '03Ut9mzraEM45AAAZBth1iokw',
+    consumer_secret: '065BqxDDNj6zsqQd6X2xcqrEypaau5XlftoSUvnF3JZPNJHx0V',
+    access_token: '476108266-oFg94PdI88TKtWOXg80dGyIzuW3RKfUrt4bC2kEU',
+    access_token_secret: 'fbTTszyKI3XasImhiXXJFItheGcjzSW6CF4k9Hsz5D9Zb'
+});
+
 
 app.get('/search', function (req, res) {
 	var url_parts = url.parse(req.url, true);
@@ -42,14 +50,19 @@ app.get('/search', function (req, res) {
 	T.get('search/tweets', { q: query.term+' since:2015-01-01', count: 10 }, function(err, data, response) {
 		console.log("searching tweets");
 		tweets = data.statuses;
-		async.forEach(tweets, function (tweet, callback) {
-			dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
-  			callback();
-		}, 
-		function (err) {
-  			if (err) { throw err; }
-  			res.send(dataToSend);
-		});
+		if(tweets){
+			async.forEach(tweets, function (tweet, callback) {
+				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
+	  			callback();
+			}, 
+			function (err) {
+	  			if (err) { throw err; }
+	  			res.send(dataToSend);
+			});
+		}
+		else{
+			res.send([]);
+		}
   		
 	});
 });
@@ -147,6 +160,9 @@ app.get('/trends', function (req, res) {
 	dataToSend = [];
 	T.get('trends/place', { id: 23424848 }, function(err, data, response) {
 		console.log("trends for india");
-		res.send(data[0]['trends']);
+		if(data)
+			res.send(data[0]['trends']);
+		else
+			res.send([]);
 	});
 });
