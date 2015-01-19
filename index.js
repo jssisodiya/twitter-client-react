@@ -74,14 +74,19 @@ app.get('/followers', function (req, res) {
 	T.get('followers/list', { screen_name: query.screen_name,count:50 }, function(err, data, response) {
 		console.log("searching followers");
 		users = data.users;
-		async.forEach(users, function (user, callback) {
-			dataToSend.push({text:user['text'],name:user['name'],screenName:user['screen_name'],profile_image_url:user['profile_image_url'],friends_count:user['friends_count'],followers_count:user['followers_count']});
-  			callback();
-		}, 
-		function (err) {
-  			if (err) { throw err; }
-  			res.send(dataToSend);
-		});
+		if(users){
+			async.forEach(users, function (user, callback) {
+				dataToSend.push({text:user['text'],name:user['name'],screenName:user['screen_name'],profile_image_url:user['profile_image_url'],friends_count:user['friends_count'],followers_count:user['followers_count']});
+	  			callback();
+			}, 
+			function (err) {
+	  			if (err) { throw err; }
+	  			res.send(dataToSend);
+			});
+		}
+		else{
+			res.send([]);
+		}
 	});
 });
 app.get('/friends', function (req, res) {
@@ -91,14 +96,19 @@ app.get('/friends', function (req, res) {
 	T.get('friends/list', { screen_name: query.screen_name,count:50 }, function(err, data, response) {
 		console.log("searching friends");
 		users = data.users;
-		async.forEach(users, function (user, callback) {
-			dataToSend.push({text:user['text'],name:user['name'],screenName:user['screen_name'],profile_image_url:user['profile_image_url'],friends_count:user['friends_count'],followers_count:user['followers_count']});
-  			callback();
-		}, 
-		function (err) {
-  			if (err) { throw err; }
-  			res.send(dataToSend);
-		});
+		if(users){
+			async.forEach(users, function (user, callback) {
+				dataToSend.push({text:user['text'],name:user['name'],screenName:user['screen_name'],profile_image_url:user['profile_image_url'],friends_count:user['friends_count'],followers_count:user['followers_count']});
+	  			callback();
+			}, 
+			function (err) {
+	  			if (err) { throw err; }
+	  			res.send(dataToSend);
+			});
+		}
+		else{
+			res.send([]);
+		}
 	});
 });
 
@@ -109,14 +119,19 @@ app.get('/user_timeline', function (req, res) {
 	dataToSend = [];
 	T.get('statuses/user_timeline', { screen_name: query.screen_name,count:10 }, function(err, data, response) {
 		console.log("user_timeline");
-		async.forEach(data, function (tweet, callback) {
-			dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
-  			callback();
-		}, 
-		function (err) {
-  			if (err) { throw err; }
-  			res.send(dataToSend);
-		});
+		if(data){
+			async.forEach(data, function (tweet, callback) {
+				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
+	  			callback();
+			}, 
+			function (err) {
+	  			if (err) { throw err; }
+	  			res.send(dataToSend);
+			});
+		}
+		else{
+			res.send(dataToSend);
+		}
 		// res.send(data);
 	});
 });
@@ -127,14 +142,19 @@ app.get('/home_timeline', function (req, res) {
 	dataToSend = [];
 	T.get('statuses/home_timeline', { screen_name: query.screen_name,count:10 }, function(err, data, response) {
 		console.log("home_timeline");
-		async.forEach(data, function (tweet, callback) {
-			dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
-  			callback();
-		}, 
-		function (err) {
-  			if (err) { throw err; }
-  			res.send(dataToSend);
-		});
+		if(data){
+			async.forEach(data, function (tweet, callback) {
+				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
+	  			callback();
+			}, 
+			function (err) {
+	  			if (err) { throw err; }
+	  			res.send(dataToSend);
+			});
+		}
+		else{
+			res.send([]);
+		}
 		// res.send(data);
 	});
 });
@@ -145,14 +165,19 @@ app.get('/favorites', function (req, res) {
 	dataToSend = [];
 	T.get('favorites/list', { screen_name: query.screen_name,count:10 }, function(err, data, response) {
 		console.log("favorites");
-		async.forEach(data, function (tweet, callback) {
-			dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
-  			callback();
-		}, 
-		function (err) {
-  			if (err) { throw err; }
-  			res.send(dataToSend);
-		});
+		if(data){
+			async.forEach(data, function (tweet, callback) {
+				dataToSend.push({text:tweet['text'],name:tweet['user']['name'],screenName:tweet['user']['screen_name'],profile_image_url:tweet['user']['profile_image_url']});
+	  			callback();
+			}, 
+			function (err) {
+	  			if (err) { throw err; }
+	  			res.send(dataToSend);
+			});
+		}
+		else{
+			res.send([]);
+		}
 	});
 });
 
