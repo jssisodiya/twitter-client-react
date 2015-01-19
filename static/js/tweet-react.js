@@ -37,27 +37,27 @@ var UserSeachBox = React.createClass({
     getInitialState:function(){
         return {home_timeline:[],user_timeline:[],favorites:[],followers:[],following:[]};
     },
-    handleHomeTimelineClick:function(){
-        var screen_name = this.refs.screen_name.getDOMNode().value.trim();
-        console.log(screen_name);
-        if (!screen_name ) {
-          return;
-        }
-        $('#user-search-box').after("<span id='user-message'>fetching data for you</span>");
-        $.ajax({
-            url: "home_timeline?screen_name="+screen_name,
-            dataType: 'json',
-            type: 'GET',
-            success: function(homeData) {
-                this.setState({home_timeline:homeData});
-                $('#user-message').remove();
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
+    // handleHomeTimelineClick:function(){
+    //     var screen_name = this.refs.screen_name.getDOMNode().value.trim();
+    //     console.log(screen_name);
+    //     if (!screen_name ) {
+    //       return;
+    //     }
+    //     $('#user-search-box').after("<span id='user-message'>fetching data for you</span>");
+    //     $.ajax({
+    //         url: "home_timeline?screen_name="+screen_name,
+    //         dataType: 'json',
+    //         type: 'GET',
+    //         success: function(homeData) {
+    //             this.setState({home_timeline:homeData});
+    //             $('#user-message').remove();
+    //         }.bind(this),
+    //         error: function(xhr, status, err) {
+    //             console.error(this.props.url, status, err.toString());
+    //         }.bind(this)
+    //     });
         
-    },
+    // },
     handleUserTimelineClick:function(){
         var screen_name = this.refs.screen_name.getDOMNode().value.trim();
         console.log(screen_name);
@@ -148,17 +148,18 @@ var UserSeachBox = React.createClass({
         }
         $('#user-search-box').after("<span id='user-message'>fetching data for you</span>");
         $.ajax({
-            url: "home_timeline?screen_name="+screen_name,
+            url: "user_timeline?screen_name="+screen_name,
             dataType: 'json',
             type: 'GET',
-            success: function(homeData) {
-                this.setState({home_timeline:homeData});
+            success: function(userData) {
+                this.setState({user_timeline:userData});
                 $('#user-message').remove();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
+
         
         return;
     },
@@ -177,13 +178,7 @@ var UserSeachBox = React.createClass({
                         <div className="row">
                             <ul className="nav nav-pills">
                                 <li className="active">
-                                    <a data-toggle="tab" href="#home-timeline-div" onClick={this.handleHomeTimelineClick}>
-                                        <i className="fa fa-home"></i>&nbsp;
-                                        Home
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#user-timeline-div" onClick={this.handleUserTimelineClick}>
+                                    <a data-toggle="tab" id="user-timeline-click" href="#user-timeline-div" onClick={this.handleUserTimelineClick}>
                                         <i className="fa fa-user"></i>&nbsp;
                                         User
                                     </a>
@@ -210,10 +205,7 @@ var UserSeachBox = React.createClass({
                         </div>
                         <br/>
                          <div className="tab-content">
-                            <div id="home-timeline-div" className="tab-pane fade in active">
-                                <TweetList data={this.state.home_timeline} />
-                            </div>
-                            <div id="user-timeline-div" className="tab-pane fade">
+                            <div id="user-timeline-div" className="tab-pane fade in active">
                                 <TweetList data={this.state.user_timeline} />
                             </div>
                             <div id="favorites-div" className="tab-pane fade">

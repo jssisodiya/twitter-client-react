@@ -27,13 +27,19 @@ var server = app.listen(3030, function () {
 });
 
 
-var T = new Twit({
-    consumer_key: 'your_consumer_key',
-    consumer_secret: 'your_consumer_secret',
-    access_token: 'your_access_token',
-    access_token_secret: 'your_access_token_secret'
-});
+// var T = new Twit({
+//     consumer_key: 'your_consumer_key',
+//     consumer_secret: 'your_consumer_secret',
+//     access_token: 'your_access_token',
+//     access_token_secret: 'your_access_token_secret'
+// });
 
+var T = new Twit({
+    consumer_key: '03Ut9mzraEM45AAAZBth1iokw',
+    consumer_secret: '065BqxDDNj6zsqQd6X2xcqrEypaau5XlftoSUvnF3JZPNJHx0V',
+    access_token: '476108266-oFg94PdI88TKtWOXg80dGyIzuW3RKfUrt4bC2kEU',
+    access_token_secret: 'fbTTszyKI3XasImhiXXJFItheGcjzSW6CF4k9Hsz5D9Zb'
+});
 
 app.get('/search', function (req, res) {
 	var url_parts = url.parse(req.url, true);
